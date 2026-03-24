@@ -31,15 +31,15 @@
             </div>
             <div class="field">
               <label class="text-label">Meaning (English)</label>
-              <input v-model="word.meaning_en || word.meaningEn" class="input" placeholder="e.g. In the name of" @input="(e: any) => { word.meaningEn = e.target.value; word.meaning_en = e.target.value }" />
+              <input v-model="word.meaningEn" class="input" placeholder="e.g. In the name of" />
             </div>
             <div class="field">
               <label class="text-label">Root (Arabic)</label>
-              <input v-model="word.root_ar || word.rootAr" class="input input-arabic" placeholder="ب س م" @input="(e: any) => { word.rootAr = e.target.value; word.root_ar = e.target.value }" />
+              <input v-model="word.rootAr" class="input input-arabic" placeholder="ب س م" />
             </div>
             <div class="field">
               <label class="text-label">Part of Speech</label>
-              <select v-model="word.morphology_pos || word.morphologyPos" class="input select" @change="(e: any) => { word.morphologyPos = e.target.value; word.morphology_pos = e.target.value }">
+              <select v-model="word.morphologyPos" class="input select">
                 <option value="">Select</option>
                 <option value="noun">Noun (اسم)</option>
                 <option value="verb">Verb (فعل)</option>
@@ -83,10 +83,15 @@ const words = ref<any[]>([])
 const saving = ref(false)
 const saved = ref(false)
 
-// Fetch words
+// Fetch words and normalize snake_case to camelCase
 const { data: wordsData } = await useFetch(`/api/sciences/words/${hadithId}`)
 if (wordsData.value?.words) {
-  words.value = wordsData.value.words
+  words.value = wordsData.value.words.map((w: any) => ({
+    ...w,
+    meaningEn: w.meaningEn ?? w.meaning_en ?? '',
+    rootAr: w.rootAr ?? w.root_ar ?? '',
+    morphologyPos: w.morphologyPos ?? w.morphology_pos ?? '',
+  }))
 }
 
 function getToken() { return localStorage.getItem('hg-admin-token') || '' }
