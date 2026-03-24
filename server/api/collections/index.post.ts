@@ -1,4 +1,4 @@
-import { db, schema } from '~/server/db'
+import { db, schema } from '~~/server/db'
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)

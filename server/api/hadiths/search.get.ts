@@ -1,4 +1,4 @@
-import { db, schema } from '~/server/db'
+import { db, schema } from '~~/server/db'
 import { like, or, sql } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
